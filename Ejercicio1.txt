@@ -1,0 +1,116 @@
+package Ejercicio1;
+
+public class Alumno {
+
+    int carnet;
+    String nombre;
+    String direccion;
+    String telefono;
+    String edad;
+
+    public static void main(String[] args) {
+        Alumno alumno1 = new Alumno();
+        
+        int contador = 94823;
+        alumno1.carnet = contador;
+        contador++;
+        alumno1.nombre = "Amilcar";
+        alumno1.edad = "15";
+        alumno1.direccion = "Antigua";
+        alumno1.telefono = "34566778";
+        
+        System.out.println("Numero de carnet: " + alumno1.carnet);
+        System.out.println("Nombre del alumno: " + alumno1.nombre);
+        System.out.println("Edad del alumno: " + alumno1.edad);
+        System.out.println("Direccion: " + alumno1.direccion);
+        System.out.println("Telefono: " + alumno1.telefono);
+
+    }
+
+}
+
+OTRA CLASE:
+package Ejercicio1;
+
+public class Catedratico {
+
+    int numCatedratico;
+    String nombre;
+    String direccion;
+    String telefono;
+    String profesion;
+
+    public static void main(String[] args) {
+
+        Catedratico catedratico1 = new Catedratico();
+
+        int contador = 1;
+        catedratico1.numCatedratico = contador;
+        contador++;
+        catedratico1.nombre = "Juan";
+        catedratico1.direccion = "Ciudad";
+        catedratico1.telefono = "64739374";
+        catedratico1.profesion = "Mestro";
+
+        System.out.println("Numero de catedratico: " + catedratico1.numCatedratico);
+        System.out.println("Nombre: " + catedratico1.nombre);
+        System.out.println("Direccio: " + catedratico1.direccion);
+        System.out.println("Telefono: " + catedratico1.telefono);
+        System.out.println("Profesion: " + catedratico1.profesion);
+
+        Catedratico catedratico2 = new Catedratico();
+
+        catedratico2.numCatedratico = contador;
+        contador++;
+
+        System.out.println("Numero de catedratico: " + catedratico2.numCatedratico);
+    }
+
+    void nombre() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+}
+
+OTRA CLASE:
+
+package Ejercicio1;
+
+public class Curso {
+
+    int id;
+    String titulo;
+    int numMaxAlumnos;
+    int creditos;
+    int alumnosAsignados;
+    String catedratico;
+
+    public static void main(String[] args) {
+        Curso curso1 = new Curso();
+
+        curso1.titulo = "Programacion";
+        curso1.id = 12345;
+        curso1.creditos = 80;
+        curso1.catedratico = "Joaquin";
+        curso1.numMaxAlumnos = 2;
+        curso1.alumnosAsignados = 1;
+
+        System.out.println("Nombre del curso: " + curso1.titulo);
+        System.out.println("Id del curso: " + curso1.id);
+        System.out.println("Creditos necesarios: " + curso1.creditos);
+        System.out.println("Catedrático asignado: " + curso1.catedratico);
+        System.out.println("Cupo maximo: " + curso1.numMaxAlumnos);
+        System.out.println("Alumnos asignados hasta la fecha: " + curso1.alumnosAsignados);
+
+        var verificaEspacio = curso1.alumnosAsignados >= 2;
+        if (verificaEspacio) {
+            System.out.println("cupo lleno");
+        } else {
+            System.out.println("Todabia puedes asignarte");
+        }
+    }
+
+    public Curso(){
+        
+    }
+}
