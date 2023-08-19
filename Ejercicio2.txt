@@ -1,0 +1,375 @@
+package ejercicio2;
+
+public class Asiento {
+
+    private char letra;
+    private int fila;
+    private Espectador espectador; 
+
+
+    public Asiento(char letra, int fila) {
+        this.letra = letra;
+        this.fila = fila;
+        this.espectador = null; 
+    }
+
+    public char getLetra() {
+        return letra;
+    }
+
+    public void setLetra(char letra) {
+        this.letra = letra;
+    }
+
+    public int getFila() {
+        return fila;
+    }
+
+    public void setFila(int fila) {
+        this.fila = fila;
+    }
+
+    public Espectador getEspectador() {
+        return espectador;
+    }
+
+    public void setEspectador(Espectador espectador) {
+        this.espectador = espectador;
+    }
+
+    public boolean ocupado() {
+        return espectador != null;
+    }
+
+    @Override
+    public String toString() {
+        if (ocupado()) {
+            return "Asiento: " + fila + letra + " y " + espectador;
+        }
+
+        return "Asiento: " + fila + letra + " y este asiento está vacio ";
+
+    }
+
+}
+
+OTRA CLASE
+
+package ejercicio2;
+
+public class Cine {
+
+    /*Atributos*/
+    private Asiento asientos[][];
+    private double precio;
+    private Pelicula pelicula;
+
+    /*Constructor*/
+    public Cine(int filas, int columnas, double precio, Pelicula pelicula) {
+
+        asientos = new Asiento[filas][columnas];
+        this.precio = precio;
+        this.pelicula = pelicula;
+        rellenaButacas();
+    }
+
+    public Asiento[][] getAsientos() {
+        return asientos;
+    }
+
+    public void setAsientos(Asiento[][] asientos) {
+        this.asientos = asientos;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public Pelicula getPelicula() {
+        return pelicula;
+    }
+
+    public void setPelicula(Pelicula pelicula) {
+        this.pelicula = pelicula;
+    }
+
+    private void rellenaButacas() {
+
+        int fila = asientos.length;
+        for (int i = 0; i < asientos.length; i++) {
+            for (int j = 0; j < asientos[0].length; j++) {
+                //Recuerda que los char se pueden sumar
+                asientos[i][j] = new Asiento((char) ('A' + j), fila);
+            }
+            fila--; //Decremento la fila para actualizar la fila
+        }
+
+    }
+
+ 
+    public boolean haySitio() {
+
+        for (int i = 0; i < asientos.length; i++) {
+            for (int j = 0; j < asientos[0].length; j++) {
+
+                if (!asientos[i][j].ocupado()) {
+                    return true;
+                }
+
+            }
+        }
+
+        return false;
+    }
+
+
+    public boolean haySitioButaca(int fila, char letra) {
+        return getAsiento(fila, letra).ocupado();
+    }
+
+    public boolean sePuedeSentar(Espectador e) {
+        return e.tieneDinero(precio) && e.tieneEdad(pelicula.getEdadMinima());
+    }
+
+    public void sentar(int fila, char letra, Espectador e) {
+        getAsiento(fila, letra).setEspectador(e);
+    }
+
+
+    public Asiento getAsiento(int fila, char letra) {
+        return asientos[asientos.length - fila - 1][letra - 'A'];
+    }
+
+    public int getFilas() {
+        return asientos.length;
+    }
+
+    public int getColumnas() {
+        return asientos[0].length;
+    }
+
+    public void mostrar() {
+
+        System.out.println("Información cine");
+        System.out.println("Pelicula reproducida: " + pelicula);
+        System.out.println("Precio entrada: Q." + precio);
+        System.out.println("");
+        for (int i = 0; i < asientos.length; i++) {
+            for (int j = 0; j < asientos[0].length; j++) {
+                System.out.println(asientos[i][j]);
+            }
+            System.out.println("");
+        }
+    }
+
+}
+
+OTRA CLASE
+
+package ejercicio2;
+
+import java.util.Scanner;
+
+
+public class Ejercicio1 {
+
+    public static void main(String[] args) {
+
+        Pelicula pelicula = new Pelicula("Spiderman 3", 90, 16, "Sam Reimi");
+        
+
+        Scanner sn = new Scanner(System.in);
+        
+        System.out.println("Introduce el numero de filas");
+        int filas=sn.nextInt();
+        
+        System.out.println("Intrdouce el numero de columnas");
+        int columnas=sn.nextInt();
+        
+        System.out.println("Introduce el precio de la entrada de cine");
+        double precio=sn.nextDouble();
+        
+        Cine cine = new Cine(filas, columnas, precio, pelicula);
+
+        System.out.println("Introduce el numero de espectadores a crear");
+        int numEspectadores = sn.nextInt();
+
+        Espectador Es;
+        int fila;
+        char letra;
+
+        System.out.println("Espectadores generados: ");
+       
+        for (int i = 0; i < numEspectadores && cine.haySitio(); i++) {
+
+            //Generamos un espectador
+            Es = new Espectador(
+                    Metodos.nombres[Metodos.generaNumeroEnteroAleatorio(0, Metodos.nombres.length - 1)],
+                    Metodos.generaNumeroEnteroAleatorio(10, 30),
+                    Metodos.generaNumeroEnteroAleatorio(1, 35)); 
+
+            System.out.println(Es);
+            
+            do {
+
+                fila = Metodos.generaNumeroEnteroAleatorio(0, cine.getFilas() - 1);
+                letra = (char) Metodos.generaNumeroEnteroAleatorio('A', 'A' + (cine.getColumnas()-1));
+
+            } while (cine.haySitioButaca(fila, letra));
+
+            if (cine.sePuedeSentar(Es)) {
+                Es.pagar(cine.getPrecio());
+                cine.sentar(fila, letra, Es);
+            }
+
+        }
+
+        System.out.println("");
+        cine.mostrar();
+        
+        System.out.println("Fin");
+
+    }
+
+}
+
+OTRA CLASE
+
+package ejercicio2;
+
+public class Espectador {
+
+    private String nombre;
+    private int edad;
+    private double dinero;
+
+    public Espectador(String nombre, int edad, double dinero) {
+        this.nombre = nombre;
+        this.edad = edad;
+        this.dinero = dinero;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    public double getDinero() {
+        return dinero;
+    }
+
+    public void setDinero(double dinero) {
+        this.dinero = dinero;
+    }
+
+
+    public void pagar(double precio) {
+        dinero -= precio;
+    }
+
+
+    public boolean tieneEdad(int edadMinima) {
+        return edad >= edadMinima;
+    }
+
+    public boolean tieneDinero(double precioEntrada) {
+        return dinero >= precioEntrada;
+    }
+
+    @Override
+    public String toString() {
+        return "el nombre del espectador es " + nombre + " de " + edad + " años y con Q" + dinero + " disponibles.";
+    }
+
+}
+
+OTRA CLASE
+
+package ejercicio2;
+
+
+public class Metodos {
+
+    public static final String nombres[] = {"Christian", "Mariela", "Marta", "Daniel"};
+
+    public static int generaNumeroEnteroAleatorio(int minimo, int maximo) {
+        int num = (int) (Math.random() * (minimo - (maximo + 1)) + (maximo + 1));
+        return num;
+    }
+
+}
+
+OTRA CLASE
+
+package ejercicio2;
+
+
+public class Pelicula {
+
+    private String titulo;
+    private int duracion;
+    private int edadMinima;
+    private String director;
+
+
+    public Pelicula(String titulo, int duracion, int edadMinima, String director) {
+        this.titulo = titulo;
+        this.duracion = duracion;
+        this.edadMinima = edadMinima;
+        this.director = director;
+    }
+
+  
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
+    public int getEdadMinima() {
+        return edadMinima;
+    }
+
+    public void setEdadMinima(int edadMinima) {
+        this.edadMinima = edadMinima;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    @Override
+    public String toString() {
+        return "'" + titulo + "' del director " + director + ", con una duracion de " + duracion + " minutos y la edad minima es de " + edadMinima + " años";
+    }
+
+}
